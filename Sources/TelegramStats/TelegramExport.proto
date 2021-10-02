@@ -1,0 +1,19 @@
+syntax = "proto3";
+import "google/protobuf/struct.proto";
+import "google/protobuf/Timestamp.proto";
+
+message TelegramExport {
+    string name = 1;
+    string type = 2;
+    int64 id = 3;
+    repeated Message messages = 4;
+}
+
+message Message {
+    int64 id = 1;
+    string type = 2;
+    string date = 3;
+    string from = 4;
+    string fromID = 5 [json_name="from_id"];
+    google.protobuf.Value text = 6;
+}
