@@ -170,10 +170,12 @@ struct TelegramStats: ParsableCommand {
                 endDateValue = validEndDate
             }
             
+            
             for message in export.messages {
                 if let from = from, message.from != from {
                     continue
                 }
+                
                 let date = formatter.date(from: message.date + "Z")!
                 
                 if let startDateValue = startDateValue, date < startDateValue {
@@ -203,6 +205,9 @@ struct TelegramStats: ParsableCommand {
             let numberFormatter = NumberFormatter()
             numberFormatter.minimumIntegerDigits = 2
             for i in 0..<24 {
+                if total == 0 {
+                    fatalError("No messages found for this range")
+                }
                 let percentage = Int(((Double(counter[i])/total) * 100 * Double(scale)).rounded())
                 let hourString = numberFormatter.string(from: NSNumber(value: i))!
                 let points = [String](repeating: "•", count: percentage).joined()
