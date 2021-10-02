@@ -128,6 +128,9 @@ struct TelegramStats: ParsableCommand {
         @Option(name: .long, help: "Scale the graph by the specified integer")
         var scale: Int = 1
         
+        @Option(name: .long, help: "The hour to start the graph at")
+        var graphStart: Int = 0
+        
         
         
         mutating func run() throws {
@@ -202,14 +205,18 @@ struct TelegramStats: ParsableCommand {
                 counter[hourComponent] += 1
             }
             
+            if total == 0 {
+                fatalError("No messages found for this range")
+            }
+            
+            print("\(Int(total)) messages found\n")
+            
             let numberFormatter = NumberFormatter()
             numberFormatter.minimumIntegerDigits = 2
             for i in 0..<24 {
-                if total == 0 {
-                    fatalError("No messages found for this range")
-                }
-                let percentage = Int(((Double(counter[i])/total) * 100 * Double(scale)).rounded())
-                let hourString = numberFormatter.string(from: NSNumber(value: i))!
+                let actualHour = (i + graphStart) % 24
+                let percentage = Int(((Double(counter[actualHour])/total) * 100 * Double(scale)).rounded())
+                let hourString = numberFormatter.string(from: NSNumber(value: actualHour))!
                 let points = [String](repeating: "•", count: percentage).joined()
                 print("\(hourString):00 - \(points)")
             }
