@@ -203,7 +203,7 @@ struct TelegramStats: ParsableCommand {
             let numberFormatter = NumberFormatter()
             numberFormatter.minimumIntegerDigits = 2
             for i in 0..<24 {
-                let percentage = Int(((Double(counter[i])/total) * 100).rounded()) * scale
+                let percentage = Int(((Double(counter[i])/total) * 100 * Double(scale)).rounded())
                 let hourString = numberFormatter.string(from: NSNumber(value: i))!
                 let points = [String](repeating: "•", count: percentage).joined()
                 print("\(hourString):00 - \(points)")
